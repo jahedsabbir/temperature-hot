@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Temperature Hot</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            background: url(images/bg-image.jpg) no-repeat;
+            background-size: cover;
+            height: 100vh;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <form class="col-md-6 m-auto py-5">
+            <div class="input-group mb-3">
+                <input id="inputValue" type="text" class="form-control" placeholder="Enter a location for Weather ...">
+                <div class="input-group-append">
+                    <button id="button" type="button" class="btn btn-danger">Search</button>
+                </div>
+            </div>
+        </form>
+        <div class="weather-status text-white text-center">
+            <img id="weatherImg" src="https://openweathermap.org/img/wn/02d@2x.png" alt="">
+            <h1 id="cityName"></h1>
+            <h3><span id="temp"></span>&deg;C</h3>
+            <h1 id="desc" class="lead"></h1>
+        </div>
+    </div>
+
+</body>
+
+</html>
+
+    <script>
+
+
+        var input_value = document.getElementById('inputValue');
+        var button = document.getElementById('button');
+        var city_name = document.getElementById('cityName');
+        var temp = document.getElementById('temp');
+        var desc = document.getElementById('desc');
+
+
+
+button.addEventListener('click',function(){
+    fetch('https://api.openweathermap.org/data/2.5/weather?q='+inputValue.value+'&appid=f1f60bb66d167060a2845be999f78f81')
+        .then(res => res.json())
+        .then(data =>{
+            var nameValue = data['name'];
+            //console.log(nameValue);
+            var temValue = data['main']['temp'];
+            var descValue = data['weather'][0]['description'];
+
+            cityName.innerHTML = nameValue;
+            temp.innerHTML =(temValue-273).toFixed(1);
+            desc.innerHTML = descValue;
+
+            if(temValue >293.15 && temValue < 303.15){
+                document.getElementById('weatherImg').src = "http://openweathermap.org/img/wn/02n@2x.png"
+            }else if (temValue >=283.50 && temValue< 293.15){
+                document.getElementById('weatherImg').src = "http://openweathermap.org/img/wn/10n@2x.png"
+            }else{
+                document.getElementById('weatherImg').src = "http://openweathermap.org/img/wn/01d@2x.png"
+            }
+        })
+    .catch( err => alert('Wrong city you try!'))
+})
+
+
+    
+    </script>
+</body>
+
+</html>
